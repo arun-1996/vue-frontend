@@ -52,7 +52,7 @@
                             <span>Support</span>
                         </router-link>
                         <div class="dropdown-divider"></div>
-                        <a href="#!" class="dropdown-item">
+                        <a href="#!" v-on:click="logout" class="dropdown-item">
                             <i class="ni ni-user-run"></i>
                             <span>Logout</span>
                         </a>
@@ -84,26 +84,6 @@
                 <!--Heading-->
                 <h6 class="navbar-heading text-muted">Documentation</h6>
                 <!--Navigation-->
-                <ul class="navbar-nav mb-md-3">
-                    <li class="nav-item">
-                        <a class="nav-link"
-                           href="https://demos.creative-tim.com/vue-argon-dashboard/documentation">
-                            <i class="ni ni-spaceship"></i> Getting started
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link"
-                           href="https://demos.creative-tim.com/vue-argon-dashboard/documentation/foundation/colors.html">
-                            <i class="ni ni-palette"></i> Foundation
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link"
-                           href="https://demos.creative-tim.com/vue-argon-dashboard/documentation/components/alerts.html">
-                            <i class="ni ni-ui-04"></i> Components
-                        </a>
-                    </li>
-                </ul>
             </div>
             </div>
     </nav>
@@ -139,6 +119,12 @@
       },
       showSidebar() {
         this.$sidebar.displaySidebar(true)
+      },
+      logout() {
+        this.$store.dispatch('logout')
+        .then(() => {
+          this.$router.push('/login')
+        })
       }
     },
     beforeDestroy() {

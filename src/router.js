@@ -2,11 +2,29 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import DashboardLayout from '@/layout/DashboardLayout'
 import AuthLayout from '@/layout/AuthLayout'
+import store from './store/store'
 Vue.use(Router)
 
 export default new Router({
   linkExactActiveClass: 'active',
   routes: [
+    {
+      path: '/',
+      redirect: 'login',
+      component: AuthLayout,
+      children: [
+        {
+          path: '/login',
+          name: 'login',
+          component: () => import(/* webpackChunkName: "demo" */ './views/Login.vue')
+        },
+        {
+          path: '/register',
+          name: 'register',
+          component: () => import(/* webpackChunkName: "demo" */ './views/Register.vue')
+        }
+      ]
+    },
     {
       path: '/',
       redirect: 'dashboard',
@@ -31,33 +49,22 @@ export default new Router({
           component: () => import(/* webpackChunkName: "demo" */ './views/UserProfile.vue')
         },
         {
-          path: '/maps',
-          name: 'maps',
-          component: () => import(/* webpackChunkName: "demo" */ './views/Maps.vue')
-        },
-        {
           path: '/tables',
           name: 'tables',
           component: () => import(/* webpackChunkName: "demo" */ './views/Tables.vue')
         }
       ]
-    },
-    {
-      path: '/',
-      redirect: 'login',
-      component: AuthLayout,
-      children: [
-        {
-          path: '/login',
-          name: 'login',
-          component: () => import(/* webpackChunkName: "demo" */ './views/Login.vue')
-        },
-        {
-          path: '/register',
-          name: 'register',
-          component: () => import(/* webpackChunkName: "demo" */ './views/Register.vue')
-        }
-      ]
     }
-  ]
+  ],
+  beforeEach: (to, from, next) => {
+    if(to.matched.some(record => record.meta.requiresAuth)) {
+      if (store.getters.isLoggedIn) {
+        next()
+        return
+      }
+      next('/login')
+    } else {
+      next()
+    }
+  }
 })

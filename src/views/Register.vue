@@ -2,44 +2,29 @@
     <div class="row justify-content-center">
         <div class="col-lg-5 col-md-7">
             <div class="card bg-secondary shadow border-0">
-                <div class="card-header bg-transparent pb-5">
-                    <div class="text-muted text-center mt-2 mb-3">
-                        <small>Sign up with</small>
-                    </div>
-                    <div class="btn-wrapper text-center">
-                        <a href="#" class="btn btn-neutral btn-icon">
-                            <span class="btn-inner--icon"><img src="img/icons/common/github.svg"></span>
-                            <span class="btn-inner--text">Github</span>
-                        </a>
-                        <a href="#" class="btn btn-neutral btn-icon">
-                            <span class="btn-inner--icon"><img src="img/icons/common/google.svg"></span>
-                            <span class="btn-inner--text">Google</span>
-                        </a>
-                    </div>
-                </div>
                 <div class="card-body px-lg-5 py-lg-5">
                     <div class="text-center text-muted mb-4">
-                        <small>Or sign up with credentials</small>
+                        <h3>Register</h3>
                     </div>
                     <form role="form">
 
                         <base-input class="input-group-alternative mb-3"
                                     placeholder="Name"
                                     addon-left-icon="ni ni-hat-3"
-                                    v-model="model.name">
+                                    v-model="registerData.name">
                         </base-input>
 
                         <base-input class="input-group-alternative mb-3"
                                     placeholder="Email"
                                     addon-left-icon="ni ni-email-83"
-                                    v-model="model.email">
+                                    v-model="registerData.email">
                         </base-input>
 
                         <base-input class="input-group-alternative"
                                     placeholder="Password"
                                     type="password"
                                     addon-left-icon="ni ni-lock-circle-open"
-                                    v-model="model.password">
+                                    v-model="registerData.password">
                         </base-input>
 
                         <div class="text-muted font-italic">
@@ -54,7 +39,7 @@
                             </div>
                         </div>
                         <div class="text-center">
-                            <base-button type="primary" class="my-4">Create account</base-button>
+                            <base-button type="primary" class="my-4" v-on:click="signUp">Create account</base-button>
                         </div>
                     </form>
                 </div>
@@ -75,18 +60,31 @@
     </div>
 </template>
 <script>
-  export default {
-    name: 'register',
-    data() {
-      return {
-        model: {
-          name: '',
-          email: '',
-          password: ''
+    import axios from 'axios'
+    export default {
+        name: 'register',
+        data() {
+            return {
+                registerData: {
+                    name: '',
+                    email: '',
+                    password: '',
+                    device_name: 'web'
+                }
+            }
+        },
+        methods:{
+            signUp(){
+                axios.post('http://localhost:8000/api/register',this.registerData)
+                .then(function(response){
+                    console.log(response);
+                })
+                .catch(function(error){
+                    console.log(error);
+                });
+            }
         }
-      }
     }
-  }
 </script>
 <style>
 </style>
